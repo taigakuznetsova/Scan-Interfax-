@@ -1,0 +1,289 @@
+{
+	"info": {
+		"_postman_id": "b15cfcdf-bf6e-458f-94c0-9298eb203491",
+		"name": "СКАН-Интерфакс",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "27096116",
+		"_collection_link": "https://solar-escape-798793.postman.co/workspace/Projects~2b80bb21-0236-4b44-8eef-0d57e7d2b6d2/collection/27096116-b15cfcdf-bf6e-458f-94c0-9298eb203491?action=share&creator=27096116&source=collection_link"
+	},
+	"item": [
+		{
+			"name": "Авторизация пользователя",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"let jsonData = JSON.parse(responseBody);\r",
+							" pm.collectionVariables.set(\"test_auth\", jsonData.accessToken)\r",
+							" "
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"login\": {{test_login}},\r\n    \"password\":{{test_password}} \r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/v1/account/login",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"account",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Получить текущий баланс пользователя",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"let jsonData = JSON.parse(responseBody);\r",
+							" pm.collectionVariables.set(\"current_balance\", jsonData.balance)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/v1/account/balance",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"account",
+						"balance"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Получить темы публикаций",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"let jsonData = JSON.parse(responseBody);\r",
+							" pm.collectionVariables.set(\"subjects_name1\", jsonData.subjects[0].name);\r",
+							"\r",
+							"pm.test (\"Запись имени в переменную\", function () {\r",
+							"let jsonData = JSON.parse(responseBody);\r",
+							"pm.collectionVariables.set(\"subjects_name2\", jsonData.subjects[1].name);\r",
+							"});\r",
+							" \r",
+							"pm.test (\"Запись имени в переменную\", function () {\r",
+							"let jsonData = JSON.parse(responseBody);\r",
+							"pm.collectionVariables.set(\"subjects_name3\", jsonData.subjects[2].name);\r",
+							"});\r",
+							" \r",
+							" pm.test (\"Запись имени в переменную\", function () {\r",
+							"let jsonData = JSON.parse(responseBody);\r",
+							"pm.collectionVariables.set(\"subjects_total\", jsonData.totalCount);\r",
+							"});\r",
+							" "
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/v1/entities/subjects?index=0&pageSize=30",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"entities",
+						"subjects"
+					],
+					"query": [
+						{
+							"key": "index",
+							"value": "0"
+						},
+						{
+							"key": "pageSize",
+							"value": "30"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Получить документы в формате \"ScanDoc\" по идентификаторам",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test (\"Запись имени в переменную\", function () {\r",
+							"let jsonData = JSON.parse(responseBody);\r",
+							"pm.collectionVariables.set(\"news_agent_1\", jsonData[0].ok.source.name);\r",
+							"});\r",
+							"pm.test (\"Запись имени в переменную\", function () {\r",
+							"let jsonData = JSON.parse(responseBody);\r",
+							"pm.collectionVariables.set(\"news_agent_2\", jsonData[1].ok.source.name);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"ids\": [\r\n    \"1:0JPQqdGM0JNWCdCzf2Jt0LHQotGV0ZUh0ZbRlBXCt0Je0JHQruKAnDcUXkZQ0YvQscKnehLRnNC1KtGK0Ll9BWLigLo/HXXCrhw=\",\r\n\"1:fmYoHEjQrRbQhz3RiUtm4oCh0JLRmtCLIyU10IzigqzRgGjQmCoR0JFg0YRhwrVzN9CxDUM50KcpdTbRiNCLwpjRkuKAphXRkVxh0JU50K5uWdC50L7RjX0C0KwQRsKp\"  \r\n  ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/v1/documents",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"documents"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{test_auth}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "https://gateway.scan-interfax.ru",
+			"type": "string"
+		},
+		{
+			"key": "test_login",
+			"value": "\"sf_student5\"",
+			"type": "string"
+		},
+		{
+			"key": "test_password",
+			"value": "\"LuwAwJf\"",
+			"type": "string"
+		},
+		{
+			"key": "test_auth",
+			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOiI0MmVhMmY3OS1jZDgyLWVkMTEtODI3NS04NzJjODBhZjI3NTMiLCJuYmYiOjE2ODY1MTY4ODAsImV4cCI6MTY4NjYwMzI4MCwiaXNzIjoiU2NhbkdhdGV3YXkiLCJhdWQiOiJzZl9zdHVkZW50NSJ9.RS_5k6XDQtFzyEM9ls4F1jTkC3FoHzxnFZ3otcFRgYA",
+			"type": "string"
+		},
+		{
+			"key": "current_balance",
+			"value": "774193",
+			"type": "string"
+		},
+		{
+			"key": "subjects_name1",
+			"value": "Административная и хозяйственная деятельность",
+			"type": "string"
+		},
+		{
+			"key": "subjects_name2",
+			"value": "Административные правонарушения",
+			"type": "string"
+		},
+		{
+			"key": "subjects_name3",
+			"value": "Отставки и назначения",
+			"type": "string"
+		},
+		{
+			"key": "subjects_total",
+			"value": "698",
+			"type": "string"
+		},
+		{
+			"key": "news_agent_1",
+			"value": "Вести.Ru (vesti.ru)",
+			"type": "string"
+		},
+		{
+			"key": "news_agent_2",
+			"value": "Аргументы и Факты - Казань (kazan.aif.ru)",
+			"type": "string"
+		}
+	]
+}
